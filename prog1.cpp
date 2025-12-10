@@ -21,7 +21,7 @@ public:
     {
         balance += amount;
         cout << "Money Deposited Successfully" << endl;
-        cout << "Current Balance is: " << balance;
+        cout << "Current Balance is: " << balance<<endl;
     }
     virtual void withdraw(double amount)
     {
@@ -29,6 +29,7 @@ public:
         {
             balance -= amount;
             cout << "Money Withdrawed Successfully" << endl;
+            cout<<"Current Balance is: "<<balance<<endl;
         }
         else
         {
@@ -86,25 +87,39 @@ public:
         OverdraftLimit = limit;
     }
     void withdraw(double amount) override
+{
+    double current = getbalance();
+
+    if (amount <= current + OverdraftLimit)
     {
-        if (amount <= getbalance() + OverdraftLimit)
+        if (amount <= current)
         {
-            cout << endl
-                 << "Money Withdrawed Succesfully(Including Overdraft if needed)" << endl;
+            cout << "Money Withdrawn Successfully." << endl;
+            cout << "Amount withdrawn: " << amount << endl;
+            double newBal = current - amount;
+
+            cout << "Updated Balance: " << newBal << endl;
         }
         else
         {
-            cout << endl
-                 << "Overdraft Limit Exceeded" << endl;
+            cout << "Money Withdrawn Successfully (Overdraft Used)." << endl;
+            cout << "Overdraft Amount Used: " << amount - current << endl;
+            cout << "Updated Balance: 0 (Overdraft covers the rest)" << endl;
         }
     }
+    else
+    {
+        cout << "Overdraft Limit Exceeded!" << endl;
+    }
+}
+
     void display() override
     {
         BankAccount::display();
         cout << endl
              << "Account Type: Checking Account" << endl;
         cout << endl
-             << "OverDraft Limit" << OverdraftLimit << endl;
+             << "OverDraft Limit: " << OverdraftLimit << endl;
     }
 };
 
@@ -138,7 +153,7 @@ int main()
     int choice;
     do
     {
-        cout << "1.Create Savings Account:"<<endl;
+        cout <<endl<< "1.Create Savings Account:"<<endl;
         cout << "2.Create Checking Account:"<<endl;
         cout << "3.Create Fixed Deposit Account:"<<endl;
         cout << "4.Deposit Money"<<endl;
@@ -165,7 +180,7 @@ int main()
             cout << "Enter Interest Rate (%): ";
             cin >> rate;
             acc = new SavingsAccount(accNum, name, bal, rate);
-            cout << "Savings Account Created.\n";
+            cout << "Savings Account Created."<<endl;
             break;
         }
 
@@ -184,7 +199,7 @@ int main()
             cin >> limit;
 
             acc = new CheckingAccount(accNum, name, bal, limit);
-            cout << "Checking Account Created.\n";
+            cout << "Checking Account Created."<<endl;
             break;
         }
         case 3:
@@ -203,14 +218,14 @@ int main()
             cin >> term;
 
             acc = new FixedDepositAccount(accNum, name, bal, term);
-            cout << "Fixed Deposit Account Created.\n";
+            cout << "Fixed Deposit Account Created."<<endl;
             break;
         }
         case 4:
         {
             if (!acc)
             {
-                cout << "Create an account first!\n";
+                cout << "Create an account first!"<<endl;
                 break;
             }
             double amt;
@@ -220,7 +235,7 @@ int main()
             break;
         }
           case 5: {
-            if (!acc) { cout << "Create an account first!\n"; break; }
+            if (!acc) { cout << "Create an account first!"<<endl; break; }
             double amt;
             cout << "Enter withdrawal amount: ";
             cin >> amt;
@@ -229,20 +244,20 @@ int main()
         }
          case 6:
             if (acc) acc->display();
-            else cout << "Create an account first!\n";
+            else cout << "Create an account first!"<<endl;
             break;
 
         case 7:
             if (acc) cout << "Interest: " << acc->calculateinterest() << endl;
-            else cout << "Create an account first!\n";
+            else cout << "Create an account first!"<<endl;
             break;
 
         case 8:
-            cout << "Exiting...\n";
+            cout << "Exited Succesfully"<<endl;
             break;
 
         default:
-            cout << "Invalid choice.\n";
+            cout << "Invalid choice."<<endl;
         
 
         }
